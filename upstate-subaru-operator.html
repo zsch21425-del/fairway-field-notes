@@ -1,0 +1,1344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>The Upstate Subaru Operator — A Playbook</title>
+<style>
+  /* System font stacks — work everywhere, no internet needed */
+  /* Serif stack: Apple / macOS / iOS / Windows / Android / Linux */
+  /* Mono stack: standard coding fonts */
+  :root {
+    --forest: #1f3a2e;
+    --forest-deep: #152a20;
+    --moss: #4a6b52;
+    --clay: #c1663f;
+    --clay-deep: #9a4e2f;
+    --rust: #8b3a1f;
+    --cream: #f4ecd8;
+    --paper: #ede3c8;
+    --paper-dark: #e0d4b3;
+    --ink: #1a1a15;
+    --ink-soft: #3a3a30;
+    --gold: #b8892e;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    line-height: 1.65;
+    font-size: 17px;
+    background-image:
+      radial-gradient(circle at 20% 10%, rgba(193, 102, 63, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 80% 80%, rgba(31, 58, 46, 0.04) 0%, transparent 40%);
+  }
+
+  /* Paper grain texture */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.25;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.15 0 0 0 0 0.12 0 0 0 0 0.08 0 0 0 0.4 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+
+  .container { max-width: 1200px; margin: 0 auto; padding: 0 32px; position: relative; z-index: 2; }
+
+  /* ===== HERO ===== */
+  .hero {
+    background: var(--forest-deep);
+    color: var(--cream);
+    padding: 80px 0 100px;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 6px solid var(--clay);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(90deg, transparent 0%, transparent 49.5%, rgba(193, 102, 63, 0.08) 49.5%, rgba(193, 102, 63, 0.08) 50.5%, transparent 50.5%),
+      linear-gradient(0deg, transparent 0%, transparent 49.5%, rgba(193, 102, 63, 0.08) 49.5%, rgba(193, 102, 63, 0.08) 50.5%, transparent 50.5%);
+    background-size: 80px 80px;
+    opacity: 0.5;
+    pointer-events: none;
+  }
+  .hero::after {
+    content: '';
+    position: absolute;
+    bottom: -1px; left: 0; right: 0;
+    height: 60px;
+    background-image:
+      radial-gradient(ellipse 120px 60px at 10% 100%, var(--forest-deep) 50%, transparent 50%),
+      radial-gradient(ellipse 180px 80px at 30% 100%, var(--forest-deep) 50%, transparent 50%),
+      radial-gradient(ellipse 140px 70px at 55% 100%, var(--forest-deep) 50%, transparent 50%),
+      radial-gradient(ellipse 200px 90px at 80% 100%, var(--forest-deep) 50%, transparent 50%),
+      radial-gradient(ellipse 100px 50px at 95% 100%, var(--forest-deep) 50%, transparent 50%);
+    background-color: var(--paper);
+    pointer-events: none;
+  }
+
+  .hero-kicker {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    color: var(--clay);
+    text-transform: uppercase;
+    margin-bottom: 28px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-kicker::before, .hero-kicker::after {
+    content: '';
+    height: 1px;
+    background: var(--clay);
+    flex: 1;
+    max-width: 60px;
+    opacity: 0.5;
+  }
+  .hero h1 {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-weight: 900;
+    font-size: clamp(48px, 8vw, 110px);
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 32px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero h1 em {
+    font-style: italic;
+    color: var(--clay);
+    font-weight: 400;
+  }
+  .hero-tagline {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(22px, 3vw, 32px);
+    color: var(--clay);
+    margin-bottom: 32px;
+    letter-spacing: -0.01em;
+    position: relative;
+    z-index: 2;
+    display: inline-flex;
+    align-items: center;
+    gap: 16px;
+  }
+  .hero-tagline::before {
+    content: '';
+    width: 40px;
+    height: 1px;
+    background: var(--clay);
+    opacity: 0.6;
+  }
+  .hero-sub {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: clamp(18px, 2.2vw, 24px);
+    line-height: 1.4;
+    max-width: 720px;
+    color: rgba(244, 236, 216, 0.85);
+    margin-bottom: 48px;
+    position: relative;
+    z-index: 2;
+  }
+  .hero-meta {
+    display: flex;
+    gap: 48px;
+    flex-wrap: wrap;
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(244, 236, 216, 0.6);
+    position: relative;
+    z-index: 2;
+  }
+  .hero-meta span strong {
+    display: block;
+    color: var(--cream);
+    font-size: 14px;
+    margin-top: 4px;
+    font-weight: 500;
+  }
+
+  /* ===== TABLE OF CONTENTS ===== */
+  .toc {
+    padding: 60px 0;
+    border-bottom: 1px solid var(--paper-dark);
+  }
+  .toc-title {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--rust);
+    text-transform: uppercase;
+    margin-bottom: 32px;
+  }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 4px;
+  }
+  .toc-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 20px 4px;
+    border-bottom: 1px solid var(--paper-dark);
+    text-decoration: none;
+    color: var(--ink);
+    transition: all 0.3s;
+  }
+  .toc-item:hover {
+    background: rgba(31, 58, 46, 0.04);
+    padding-left: 12px;
+  }
+  .toc-num {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 36px;
+    font-weight: 900;
+    color: var(--clay);
+    line-height: 1;
+    font-style: italic;
+  }
+  .toc-text {
+    flex: 1;
+  }
+  .toc-text h4 {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 19px;
+    font-weight: 600;
+    line-height: 1.25;
+    margin-bottom: 6px;
+  }
+  .toc-text p {
+    font-size: 13px;
+    color: var(--ink-soft);
+    line-height: 1.4;
+  }
+
+  /* ===== SECTIONS ===== */
+  section.chapter {
+    padding: 100px 0;
+    position: relative;
+  }
+  section.chapter.alt {
+    background: var(--cream);
+  }
+  .chapter-header {
+    max-width: 900px;
+    margin: 0 auto 72px;
+    text-align: center;
+    position: relative;
+  }
+  .chapter-num {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.3em;
+    color: var(--rust);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .chapter-num::before, .chapter-num::after {
+    content: '';
+    width: 30px;
+    height: 1px;
+    background: var(--rust);
+    opacity: 0.5;
+  }
+  .chapter-title {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-weight: 900;
+    font-size: clamp(36px, 5vw, 64px);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    color: var(--forest-deep);
+    margin-bottom: 24px;
+  }
+  .chapter-title em {
+    font-style: italic;
+    color: var(--clay);
+    font-weight: 400;
+  }
+  .chapter-lede {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 22px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+    font-style: italic;
+    max-width: 720px;
+    margin: 0 auto;
+  }
+
+  /* Prose styling */
+  .prose {
+    max-width: 760px;
+    margin: 0 auto;
+    font-size: 18px;
+    line-height: 1.75;
+  }
+  .prose > p {
+    margin-bottom: 24px;
+  }
+  .prose h3 {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 32px;
+    font-weight: 700;
+    line-height: 1.2;
+    margin: 56px 0 20px;
+    color: var(--forest-deep);
+    letter-spacing: -0.01em;
+  }
+  .prose h3::before {
+    content: '§';
+    color: var(--clay);
+    margin-right: 12px;
+    font-style: italic;
+    font-weight: 400;
+  }
+  .prose strong {
+    color: var(--forest-deep);
+    font-weight: 700;
+  }
+  .prose em {
+    color: var(--rust);
+    font-style: italic;
+  }
+  .prose a {
+    color: var(--rust);
+    text-decoration: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 3px;
+  }
+
+  /* First letter drop cap */
+  .prose .lede::first-letter {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-weight: 900;
+    font-size: 82px;
+    float: left;
+    line-height: 0.85;
+    padding: 4px 12px 0 0;
+    color: var(--clay);
+    font-style: italic;
+  }
+
+  /* ===== STAT CARDS ===== */
+  .stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 2px;
+    background: var(--forest-deep);
+    margin: 48px 0;
+    border: 2px solid var(--forest-deep);
+  }
+  .stat {
+    background: var(--paper);
+    padding: 32px 24px;
+    position: relative;
+  }
+  .stats-grid.dark .stat {
+    background: var(--forest-deep);
+    color: var(--cream);
+  }
+  .stat-num {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-weight: 900;
+    font-size: 56px;
+    line-height: 1;
+    color: var(--clay);
+    letter-spacing: -0.03em;
+    margin-bottom: 12px;
+    font-variant-numeric: oldstyle-nums;
+  }
+  .stats-grid.dark .stat-num { color: var(--gold); }
+  .stat-label {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .stats-grid.dark .stat-label { color: rgba(244, 236, 216, 0.7); }
+
+  /* ===== PULL QUOTES ===== */
+  .pullquote {
+    max-width: 900px;
+    margin: 64px auto;
+    padding: 48px 40px;
+    border-left: 4px solid var(--clay);
+    background: linear-gradient(90deg, rgba(193, 102, 63, 0.06) 0%, transparent 100%);
+    position: relative;
+  }
+  .pullquote::before {
+    content: '"';
+    position: absolute;
+    top: -20px;
+    left: 32px;
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 120px;
+    color: var(--clay);
+    line-height: 1;
+    font-weight: 900;
+    font-style: italic;
+    opacity: 0.4;
+  }
+  .pullquote-text {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 26px;
+    line-height: 1.4;
+    font-style: italic;
+    color: var(--forest-deep);
+    font-weight: 500;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 2;
+  }
+  .pullquote-attr {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--rust);
+  }
+
+  /* ===== TACTIC CARDS ===== */
+  .tactic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 24px;
+    max-width: 1100px;
+    margin: 56px auto;
+  }
+  .tactic {
+    background: var(--cream);
+    padding: 32px 28px;
+    border: 1px solid var(--paper-dark);
+    position: relative;
+    transition: all 0.3s;
+  }
+  section.chapter.alt .tactic { background: var(--paper); }
+  .tactic:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 40px rgba(31, 58, 46, 0.08);
+    border-color: var(--clay);
+  }
+  .tactic-num {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--rust);
+    text-transform: uppercase;
+    margin-bottom: 12px;
+  }
+  .tactic h4 {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.25;
+    margin-bottom: 14px;
+    color: var(--forest-deep);
+  }
+  .tactic p {
+    font-size: 15px;
+    line-height: 1.6;
+    color: var(--ink-soft);
+  }
+  .tactic p strong { color: var(--forest-deep); }
+
+  /* ===== PARTNER LIST ===== */
+  .partner-list {
+    max-width: 900px;
+    margin: 48px auto;
+    display: grid;
+    gap: 2px;
+    background: var(--paper-dark);
+    border: 1px solid var(--paper-dark);
+  }
+  .partner {
+    background: var(--cream);
+    padding: 24px 28px;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 24px;
+    align-items: start;
+  }
+  section.chapter.alt .partner { background: var(--paper); }
+  .partner-tier {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-style: italic;
+    font-weight: 900;
+    font-size: 32px;
+    color: var(--clay);
+    line-height: 1;
+    min-width: 50px;
+  }
+  .partner-main h5 {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 19px;
+    font-weight: 700;
+    margin-bottom: 4px;
+    color: var(--forest-deep);
+  }
+  .partner-main p {
+    font-size: 14px;
+    line-height: 1.5;
+    color: var(--ink-soft);
+  }
+  .partner-badge {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+    padding: 6px 10px;
+    background: var(--forest-deep);
+    color: var(--cream);
+    text-transform: uppercase;
+    white-space: nowrap;
+    align-self: start;
+  }
+  .partner-badge.priority { background: var(--clay); }
+
+  /* ===== COMPARISON / TABLES ===== */
+  .ladder {
+    max-width: 900px;
+    margin: 56px auto;
+  }
+  .rung {
+    display: grid;
+    grid-template-columns: 80px 1fr auto;
+    gap: 24px;
+    padding: 28px 8px;
+    border-bottom: 1px solid var(--paper-dark);
+    align-items: center;
+  }
+  .rung-level {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 10px;
+    letter-spacing: 0.2em;
+    color: var(--rust);
+  }
+  .rung-title {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--forest-deep);
+    margin-bottom: 4px;
+  }
+  .rung-desc {
+    font-size: 14px;
+    color: var(--ink-soft);
+    line-height: 1.5;
+  }
+  .rung-comp {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--clay);
+    font-style: italic;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  /* ===== CALLOUT / PLAYBOOK BOX ===== */
+  .playbook-box {
+    background: var(--forest-deep);
+    color: var(--cream);
+    padding: 48px 40px;
+    margin: 64px auto;
+    max-width: 900px;
+    position: relative;
+    border-left: 6px solid var(--clay);
+  }
+  .playbook-box h4 {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.25em;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-bottom: 20px;
+  }
+  .playbook-box h3 {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--cream);
+    line-height: 1.2;
+  }
+  .playbook-box ul {
+    list-style: none;
+    padding: 0;
+  }
+  .playbook-box li {
+    padding: 12px 0 12px 32px;
+    border-bottom: 1px solid rgba(244, 236, 216, 0.15);
+    position: relative;
+    line-height: 1.55;
+  }
+  .playbook-box li:last-child { border-bottom: none; }
+  .playbook-box li::before {
+    content: '→';
+    position: absolute;
+    left: 0;
+    color: var(--clay);
+    font-weight: 700;
+  }
+  .playbook-box li strong { color: var(--gold); font-weight: 600; }
+
+  /* ===== DIVIDER ===== */
+  .divider {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    margin: 56px 0;
+    color: var(--clay);
+  }
+  .divider::before, .divider::after {
+    content: '';
+    height: 1px;
+    background: var(--paper-dark);
+    flex: 1;
+    max-width: 120px;
+  }
+  .divider span {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-style: italic;
+    font-size: 18px;
+  }
+
+  /* ===== FOOTER ===== */
+  footer {
+    background: var(--forest-deep);
+    color: var(--cream);
+    padding: 80px 0 60px;
+    position: relative;
+  }
+  footer::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 0; right: 0;
+    height: 40px;
+    background-image:
+      radial-gradient(ellipse 80px 40px at 15% 0%, var(--forest-deep) 50%, transparent 50%),
+      radial-gradient(ellipse 120px 50px at 35% 0%, var(--forest-deep) 50%, transparent 50%),
+      radial-gradient(ellipse 100px 45px at 60% 0%, var(--forest-deep) 50%, transparent 50%),
+      radial-gradient(ellipse 140px 55px at 85% 0%, var(--forest-deep) 50%, transparent 50%);
+    background-color: var(--paper);
+    pointer-events: none;
+  }
+  .footer-inner {
+    max-width: 800px;
+    margin: 0 auto;
+    text-align: center;
+    padding-top: 40px;
+  }
+  .footer-mark {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-style: italic;
+    font-size: 40px;
+    color: var(--clay);
+    margin-bottom: 20px;
+  }
+  footer p {
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif;
+    font-size: 22px;
+    line-height: 1.5;
+    margin-bottom: 32px;
+    color: rgba(244, 236, 216, 0.85);
+  }
+  .footer-meta {
+    font-family: 'SF Mono', Menlo, Monaco, Consolas, 'Courier New', monospace;
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: rgba(244, 236, 216, 0.5);
+  }
+
+  /* Responsive */
+  @media (max-width: 700px) {
+    .container { padding: 0 20px; }
+    .hero { padding: 60px 0 80px; }
+    .hero-meta { gap: 24px; }
+    .partner { grid-template-columns: auto 1fr; }
+    .partner-badge { grid-column: 2; justify-self: start; margin-top: 8px; }
+    .rung { grid-template-columns: 1fr; gap: 8px; }
+    .rung-comp { text-align: left; }
+    .pullquote { padding: 32px 24px; }
+    .pullquote-text { font-size: 20px; }
+    .playbook-box { padding: 32px 24px; }
+  }
+
+  /* Fade-in animation */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  .hero > .container > * { animation: fadeUp 0.8s ease-out both; }
+  .hero .hero-kicker { animation-delay: 0.1s; }
+  .hero h1 { animation-delay: 0.2s; }
+  .hero-sub { animation-delay: 0.4s; }
+  .hero-meta { animation-delay: 0.6s; }
+
+  @media print {
+    /* Kill the heavy SVG noise texture that bloats PDFs */
+    body::before { display: none !important; }
+    /* Ensure animations don't interfere */
+    * { animation: none !important; transition: none !important; }
+    /* Force backgrounds to print */
+    html, body { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+    /* Avoid orphan section titles */
+    .chapter-header, .chapter-title { page-break-after: avoid; }
+    .tactic, .list-card, .day, .rung, .partner, .mine, .stat { page-break-inside: avoid; }
+    .pullquote, .playbook-box, .script-box, .math-box, .warning { page-break-inside: avoid; }
+    /* Hero flourish looks off when paginated — simplify */
+    .hero::after, footer::before { display: none !important; }
+  }
+
+
+  /* ========== QA FIXES ========== */
+  @media print {
+    /* Keep chapter headers with their content */
+    .chapter-header { break-after: avoid !important; page-break-after: avoid !important; }
+    .chapter-num, .chapter-title, .chapter-lede { break-after: avoid !important; }
+
+    /* Headings should not be orphaned */
+    h3, h4, h5, .math-title, .script-box h3, .playbook-box h3 {
+      break-after: avoid !important;
+      page-break-after: avoid !important;
+    }
+
+    /* Allow prose ordered lists to break naturally (fixes wasted whitespace) */
+    .prose ol, .prose ul { break-inside: auto !important; page-break-inside: auto !important; }
+
+    /* Footer: trim trailing blank space */
+    footer { padding-bottom: 40px !important; min-height: 0 !important; }
+    footer::before { display: none !important; }
+    footer::after { display: none !important; }
+  }
+
+  /* ========== STAT GRID FIXES (apply everywhere, not just print) ========== */
+  /* Exactly-3 grids: force 3 columns. Exactly-4 grids: force 4 cols on wide, 2 on narrow. */
+  .stats-grid.three-col { grid-template-columns: repeat(3, 1fr) !important; }
+  .stats-grid.four-col { grid-template-columns: repeat(4, 1fr) !important; }
+  @media (max-width: 800px) {
+    .stats-grid.three-col { grid-template-columns: repeat(3, 1fr) !important; }
+    .stats-grid.four-col { grid-template-columns: repeat(2, 1fr) !important; }
+  }
+  @media (max-width: 500px) {
+    .stats-grid.three-col { grid-template-columns: 1fr !important; }
+    .stats-grid.four-col { grid-template-columns: 1fr !important; }
+  }
+
+  /* Three-mine grid fix (mining guide) */
+  .mines-grid.three-col { grid-template-columns: repeat(3, 1fr) !important; }
+  @media (max-width: 800px) {
+    .mines-grid.three-col { grid-template-columns: 1fr !important; }
+  }
+
+  /* ========== PULLQUOTE FIX ========== */
+  /* Move the decorative quote higher and to the left so it doesn't crash into text */
+  .pullquote { padding-top: 56px !important; }
+  .pullquote::before {
+    top: 8px !important;
+    left: 28px !important;
+    font-size: 88px !important;
+    opacity: 0.25 !important;
+  }
+
+  /* ========== ORDERED LIST STYLING ========== */
+  /* Replace default numbering with design-system numbering */
+  .prose ol {
+    list-style: none !important;
+    counter-reset: custom-counter !important;
+    padding-left: 0 !important;
+  }
+  .prose ol > li {
+    counter-increment: custom-counter !important;
+    padding-left: 48px !important;
+    position: relative !important;
+    margin-bottom: 16px !important;
+  }
+  .prose ol > li::before {
+    content: counter(custom-counter, decimal-leading-zero) !important;
+    position: absolute !important;
+    left: 0 !important;
+    top: 0 !important;
+    font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif !important;
+    font-style: italic !important;
+    font-weight: 900 !important;
+    font-size: 24px !important;
+    color: var(--clay) !important;
+    line-height: 1.3 !important;
+  }
+
+
+  /* ========== QA FIXES ROUND TWO ========== */
+  @media print {
+    /* Force every new chapter onto its own page — solves orphan chapter headers
+       and also eliminates wasted whitespace before chapter breaks */
+    section.chapter {
+      break-before: page !important;
+      page-break-before: always !important;
+    }
+    /* But the FIRST chapter of the document should not page-break (we're already on page 1 after hero) */
+    section.chapter:first-of-type {
+      break-before: auto !important;
+      page-break-before: auto !important;
+    }
+
+    /* Footer fills the remainder of its page — eliminates the trailing paper block */
+    footer {
+      break-before: page !important;
+      page-break-before: always !important;
+      min-height: 100vh !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: center !important;
+      padding-top: 40px !important;
+      padding-bottom: 40px !important;
+    }
+    footer .container { width: 100%; }
+  }
+
+</style>
+</head>
+<body>
+
+<!-- HERO -->
+<header class="hero">
+  <div class="container">
+    <h1>The Upstate<br>Subaru <em>Operator</em></h1>
+    <div class="hero-tagline">A Playbook for Wes</div>
+    <p class="hero-sub">
+      How to level up from competent three-year rep to the most trusted Subaru person in Greenville — across lead generation, brand positioning, closing, and a ten-year career arc.
+    </p>
+    <div class="hero-meta">
+      <span>Market<strong>Greenville, SC</strong></span>
+      <span>Dealership<strong>Fairway Subaru</strong></span>
+      <span>Focus<strong>Lead Gen · Strategy</strong></span>
+      <span>Reading Time<strong>~20 minutes</strong></span>
+    </div>
+  </div>
+</header>
+
+<!-- TABLE OF CONTENTS -->
+<section class="toc">
+  <div class="container">
+    <div class="toc-title">Contents</div>
+    <div class="toc-grid">
+      <a href="#thesis" class="toc-item">
+        <div class="toc-num">01</div>
+        <div class="toc-text">
+          <h4>The Strategic Shift</h4>
+          <p>Why the modern buyer has rewritten the playbook</p>
+        </div>
+      </a>
+      <a href="#leadgen" class="toc-item">
+        <div class="toc-num">02</div>
+        <div class="toc-text">
+          <h4>Lead Generation That Compounds</h4>
+          <p>Five rails running simultaneously</p>
+        </div>
+      </a>
+      <a href="#subaru" class="toc-item">
+        <div class="toc-num">03</div>
+        <div class="toc-text">
+          <h4>Winning on Brand, Not Price</h4>
+          <p>The Subaru buyer, 2025–2026 lineup, tariffs</p>
+        </div>
+      </a>
+      <a href="#greenville" class="toc-item">
+        <div class="toc-num">04</div>
+        <div class="toc-text">
+          <h4>Your Greenville Moat</h4>
+          <p>Competitors, partners, events, corporate channels</p>
+        </div>
+      </a>
+      <a href="#closing" class="toc-item">
+        <div class="toc-num">05</div>
+        <div class="toc-text">
+          <h4>Closing & Retention</h4>
+          <p>Consultative selling and the 20-year customer</p>
+        </div>
+      </a>
+      <a href="#career" class="toc-item">
+        <div class="toc-num">06</div>
+        <div class="toc-text">
+          <h4>The Ten-Year Arc</h4>
+          <p>F&amp;I, GM, dealer principal, wealth</p>
+        </div>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 1: THESIS -->
+<section class="chapter" id="thesis">
+  <div class="container">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter One</div>
+      <h1 class="chapter-title">The shift that <em>changes every tactic</em></h1>
+      <p class="chapter-lede">Before you touch a script or a CRM, the frame has to be right. Everything downstream depends on this.</p>
+    </div>
+
+    <div class="prose">
+      <p class="lede">The highest-leverage move for an experienced Subaru salesperson in Greenville isn't better scripts — it's becoming the most trusted "Subaru person" in the Upstate outdoor-and-dog community, then systematizing the next decade of referrals around that identity.</p>
+
+      <p>Seventy percent of buyers say they refer the <strong>salesperson</strong>, not the store. Your customer's lifetime value to you exceeds <strong>$40,000–$80,000</strong> across repeat purchases, service, and referrals. That economic reality — combined with Subaru's community-aligned brand, a Greenville market now over one million people, and a 2025–2026 industry inflection around tariffs and EVs — means the playbook has changed.</p>
+
+      <p>The elite 2026 car salesperson is a <em>local media brand</em>, a disciplined CRM operator, a consultative advisor for informed buyers, and a quietly ambitious career builder who treats F&amp;I or GM as a deliberate five-year destination.</p>
+    </div>
+
+    <div class="stats-grid four-col">
+      <div class="stat">
+        <div class="stat-num">14–15</div>
+        <div class="stat-label">Hours of Research Before a Modern Buyer Walks In</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">62</div>
+        <div class="stat-label">Avg Touchpoints in the Car Buyer's Journey</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">92%</div>
+        <div class="stat-label">Of Sales Were "Untraceable" in CRM (Cox)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">43.9%</div>
+        <div class="stat-label">Industry Brand Retention — The Gap You Can Win</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <p>The salesperson who wins is <strong>not the information gatekeeper</strong>; that person lost in 2015. The winner is the trusted local expert whose face, name, and community work the buyer has already encountered five times before walking onto the lot.</p>
+
+      <p>Your entire book of business now compounds or decays based on whether post-sale follow-up actually happens. Industry retention sits at 43.9%. Reps running a disciplined Joe Verde 45/90-day cadence retain roughly <strong>75%</strong>. That 31-point gap <em>is</em> your career.</p>
+    </div>
+
+    <div class="pullquote">
+      <p class="pullquote-text">Stop thinking of yourself as a salesperson. Start operating as a personal automotive advisor with a portable book. Every tactic below flows from that frame.</p>
+      <div class="pullquote-attr">— The Operating Principle</div>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 2: LEAD GENERATION -->
+<section class="chapter alt" id="leadgen">
+  <div class="container">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter Two</div>
+      <h1 class="chapter-title">A pipeline that <em>compounds</em></h1>
+      <p class="chapter-lede">Your book should run on five rails simultaneously. Most three-year reps run on one or two.</p>
+    </div>
+
+    <div class="tactic-grid">
+      <div class="tactic">
+        <div class="tactic-num">Rail 01</div>
+        <h4>Personal Brand &amp; Content</h4>
+        <p>One unified handle across TikTok, Instagram, YouTube, Facebook. <strong>3–5 posts per week.</strong> Walkaround videos of specific VINs convert highest — buyers screenshot and call about that exact car.</p>
+      </div>
+      <div class="tactic">
+        <div class="tactic-num">Rail 02</div>
+        <h4>Community Presence</h4>
+        <p>Ali Reda's world record — <strong>1,582 cars in 2017</strong> — came from near-zero social, near-100% community. In Greenville, Subaru's Love Promise does 80% of the positioning work for you.</p>
+      </div>
+      <div class="tactic">
+        <div class="tactic-num">Rail 03</div>
+        <h4>Database Mining</h4>
+        <p>VinSolutions Connect, AutoAlert, or EQUITYiQ can generate <strong>21–26% of monthly business</strong> with zero new marketing spend. Service-drive mining has the highest ROI.</p>
+      </div>
+      <div class="tactic">
+        <div class="tactic-num">Rail 04</div>
+        <h4>Speed-to-Lead Discipline</h4>
+        <p>Sub-5-minute response makes you <strong>21× more likely to qualify</strong>. 91% of dealers still omit payment in the first response. Own that gap.</p>
+      </div>
+      <div class="tactic">
+        <div class="tactic-num">Rail 05</div>
+        <h4>Referral Systems</h4>
+        <p>The Joe Verde <strong>45- and 90-day referral calls</strong>, asked at peak satisfaction. Referred customers close ~50% easier and arrive with Carvana already dismissed.</p>
+      </div>
+      <div class="tactic">
+        <div class="tactic-num">Bonus</div>
+        <h4>Video Email (BombBomb)</h4>
+        <p>A personalized 60-second walkaround within 2 hours of first contact. Almost no competitor does this. It is the single highest-leverage tool you're not using.</p>
+      </div>
+    </div>
+
+    <div class="playbook-box">
+      <h4>The Benchmark Case</h4>
+      <h3>Jesse Cannon-Wallace — @benzblogger</h3>
+      <p style="color: rgba(244,236,216,0.8); margin-bottom: 24px; font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif; font-size: 18px; font-style: italic;">Mercedes salesperson in Atlanta. ~179K TikTok followers, 12.4M likes. Openly states TikTok brings him new sales faster than any other platform.</p>
+      <ul>
+        <li><strong>Walk-around videos</strong> of specific VINs with price anchoring</li>
+        <li><strong>Honest finance breakdowns</strong> — APR vs. lease math, real numbers</li>
+        <li><strong>POV hidden-feature tours</strong> — "Let me show you the Outback's dog mode"</li>
+        <li><strong>Behind-the-scenes delivery moments</strong> — real humans, real keys handed over</li>
+        <li><strong>Educational buyer-protection content</strong> — scam avoidance, trade-in traps</li>
+      </ul>
+    </div>
+
+    <div class="prose">
+      <h3>TCPA compliance is a career risk now</h3>
+      <p>The April 11, 2025 TCPA Opt-Out Rule requires honoring opt-outs within <strong>10 business days across every channel</strong>, recognizing non-keyword revocations ("leave me alone," voicemails, emails). Penalties run <strong>$500–$1,500 per violation</strong>. Recent automotive settlements: Lithia $2.5M, Moss Brothers $850K, Interstate National $4.2M.</p>
+      <p>Never mass-text old orphan records without fresh consent. Document written permission at lead capture. This is not legal paranoia — it is the new cost of doing business.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 3: SUBARU -->
+<section class="chapter" id="subaru">
+  <div class="container">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter Three</div>
+      <h1 class="chapter-title">Winning on <em>brand</em>, not price</h1>
+      <p class="chapter-lede">Subaru's brand does more work for you than any other mainstream franchise in America — if you know how to leverage it.</p>
+    </div>
+
+    <div class="prose">
+      <h3>Who is actually buying</h3>
+      <p>The Subaru buyer profile is remarkably consistent: median age around <strong>55</strong> (Crosstrek skews younger into 18–24 urban buyers), household income around <strong>$88,000</strong>, with Forester buyers clustered in the $100–250K bracket. Heavily concentrated in education, healthcare, and tech occupations.</p>
+    </div>
+
+    <div class="stats-grid dark four-col">
+      <div class="stat">
+        <div class="stat-num">80%</div>
+        <div class="stat-label">Of Subaru Buyers Own Dogs</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">62.6%</div>
+        <div class="stat-label">SUV Owner Loyalty — 2nd Among Mainstream Brands</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">72%</div>
+        <div class="stat-label">Of Forester Households Choose Subaru Again</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">96%</div>
+        <div class="stat-label">Of Subarus Sold in the Last 10 Years Are Still on the Road</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>The 2025–2026 lineup story</h3>
+      <p>The all-new <strong>2025 Forester</strong> (6th gen, $29,995) and the <strong>2026 Forester Hybrid</strong> (194 hp, ~35 mpg combined, $34,995, now fully produced in Lafayette, Indiana starting Feb 2026) are your volume drivers.</p>
+      <p>The <strong>redesigned 2026 Outback</strong> is the polarizing conversation piece — squared SUV styling, two-inch taller roof, <strong>38 cu-ft cargo</strong>, 12.1" infotainment, and the return of physical climate controls. The base trim is gone; starting price jumped about $4,000 to $36,445. Early 2026 sales were <em>down roughly 23% YoY</em> — purists missed the wagon. Lead with the interior/space/controls story and acknowledge the styling honestly. Production moved to Japan, making it tariff-exposed.</p>
+
+      <h3>The EV trio that just arrived</h3>
+      <p>The refreshed <strong>2026 Solterra</strong> ($38,495) now delivers 288 miles range, a new 338-hp XT variant, and a <em>NACS port</em> for Supercharger access. The new <strong>Trailseeker EV</strong> ($39,995, 375 hp, 0–60 in 4.4 seconds — the quickest production Subaru ever). The <strong>Uncharted EV</strong> ($34,995, 308-mile range) is the most affordable Subaru EV ever — a Crosstrek-sized on-ramp for EV-curious buyers.</p>
+      <p>With Greenville's mix of Prisma/GE/Michelin professionals and Blue Ridge adventure weekends: charge-at-home commuters into the Uncharted, long-road-trip Blue Ridge drivers into Crosstrek Hybrid or Outback, Tesla-curious buyers into the Solterra XT.</p>
+    </div>
+
+    <div class="pullquote">
+      <p class="pullquote-text">The Love Promise creates brand-sanctioned permission to build your entire personal marketing calendar around pet adoption, park cleanups, and teacher appreciation weeks. No competitor's salesperson has anything equivalent.</p>
+      <div class="pullquote-attr">— Your unfair advantage</div>
+    </div>
+
+    <div class="prose">
+      <h3>The Love Promise, by the numbers</h3>
+      <p>Over 20 years, Subaru and its retailers have donated <strong>$346M+ through Share the Love alone</strong> (2025 edition: $26M+ across 839 hometown charities). Subaru is the <strong>largest corporate donor to both ASPCA and AdoptAClassroom</strong>, has delivered roughly <strong>5 million Meals on Wheels meals</strong>, 230,000+ LLS blankets and care kits, and 1.1 million+ Arbor Day trees.</p>
+
+      <h3>The tariff context — sell it honestly</h3>
+      <p>The <strong>15% Japan-import tariff</strong> that took effect after the September 2025 U.S.–Japan trade deal is projected to cost Subaru <strong>~$1.5B in net tariff costs</strong>, with operating profit down ~70% YoY. The 2026 Outback, Crosstrek Hybrid, WRX, BRZ, and all three EVs are Japan-built and tariff-exposed. <strong>The 2026 Forester and Ascent are Indiana-built.</strong></p>
+      <p>Practical implications: lead Forester conversations with <em>"this one's built in Indiana"</em> for buy-American customers. Push Certified Pre-Owned harder (152-point inspection, 7-year/100K-mile factory powertrain warranty, the 96%-still-on-road anchor) as the value play in an inflated new-car market.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 4: GREENVILLE -->
+<section class="chapter alt" id="greenville">
+  <div class="container">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter Four</div>
+      <h1 class="chapter-title">Your Greenville <em>moat</em></h1>
+      <p class="chapter-lede">Your market is unusually well-suited to Subaru. Know it deeper than anyone at Spartanburg or Asheville does.</p>
+    </div>
+
+    <div class="stats-grid four-col">
+      <div class="stat">
+        <div class="stat-num">1.01M</div>
+        <div class="stat-label">Greenville-Anderson-Greer MSA Population (July 2025)</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">#1</div>
+        <div class="stat-label">South Carolina on U-Haul's 2024 Net Migration</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">30</div>
+        <div class="stat-label">People Move to the Upstate Daily</div>
+      </div>
+      <div class="stat">
+        <div class="stat-num">70%</div>
+        <div class="stat-label">Of SC Inbound Movers Are 55+ — Outback/Ascent Core</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>Know your competition precisely</h3>
+      <p>Your dealership — <strong>Fairway Subaru</strong> (2209 Laurens Rd, locally owned since 1966, third-generation under Foster McKissick IV) — already has strong Love Promise execution via Lucky Pup Rescue, United Way of Greenville, and Trees Upstate.</p>
+      <p>Your main direct competitor is <strong>Subaru of Spartanburg</strong> (J.D. Power 2024 Dealer of Excellence, aggressively marketing into Greer/Simpsonville/Greenville County). Secondary shopper comparisons: <strong>Fred Anderson Subaru in Asheville</strong> (free lifetime oil changes and loaners — a real threat worth neutralizing with service-experience storytelling) and <strong>Hunter Subaru in Fletcher, NC</strong>.</p>
+      <p>Counter-Spartanburg plays live in the under-worked growth suburbs — <em>Greer CityFest, Greer Farmers Market, Simpsonville, Fountain Inn</em> — where Spartanburg's marketing footprint is thinnest.</p>
+    </div>
+
+    <h3 style="font-family: Georgia, 'Iowan Old Style', 'Apple Garamond', 'Palatino Linotype', 'Book Antiqua', serif; font-size: 28px; text-align: center; color: var(--forest-deep); margin: 72px 0 16px;">The Partner Stack</h3>
+    <p style="text-align: center; color: var(--ink-soft); margin-bottom: 40px; max-width: 600px; margin-left: auto; margin-right: auto;">Aligned with Subaru's brand in the Upstate, ranked by strategic fit.</p>
+
+    <div class="partner-list">
+      <div class="partner">
+        <div class="partner-tier">01</div>
+        <div class="partner-main">
+          <h5>Sunrift Adventures (Travelers Rest)</h5>
+          <p>SC's oldest outdoor shop, on the Swamp Rabbit Trail, pet-friendly, already donates to Trees Upstate. Host monthly gear-demo days with an Outback or Crosstrek on-site.</p>
+        </div>
+        <div class="partner-badge priority">Priority</div>
+      </div>
+      <div class="partner">
+        <div class="partner-tier">02</div>
+        <div class="partner-main">
+          <h5>Greenville Humane Society</h5>
+          <p>Ashleigh Delport, Community Development, 864-263-5602. Formal partner program — direct local vehicle for Subaru Loves Pets adoption events. Pair with Lucky Pup (already a Fairway partner).</p>
+        </div>
+        <div class="partner-badge priority">Priority</div>
+      </div>
+      <div class="partner">
+        <div class="partner-tier">03</div>
+        <div class="partner-main">
+          <h5>Meals on Wheels of Greenville</h5>
+          <p>Michelle Seaver, 864-233-6565. Delivers 1,500 meals/day across 130 routes; runs a pet food program — doubly aligned with Loves to Help and Loves Pets. A sponsored route is high-visibility placement.</p>
+        </div>
+        <div class="partner-badge">High Fit</div>
+      </div>
+      <div class="partner">
+        <div class="partner-tier">04</div>
+        <div class="partner-main">
+          <h5>Swamp Rabbit Trail</h5>
+          <p>28–32 mile paved greenway, Prisma-title-sponsored. Most valuable lifestyle anchor in the Upstate. Build a "Subaru Sunday" group-ride series ending at the dealership with a map + Sunrift voucher at every delivery.</p>
+        </div>
+        <div class="partner-badge">High Fit</div>
+      </div>
+      <div class="partner">
+        <div class="partner-tier">05</div>
+        <div class="partner-main">
+          <h5>Dog-Friendly Breweries</h5>
+          <p>Yee-Haw, Fireforge, Thomas Creek, Birds Fly South, Swamp Rabbit Brewery (naming synergy). All viable pet-adoption event partners.</p>
+        </div>
+        <div class="partner-badge">Event</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>Events worth your calendar</h3>
+      <p><strong>Fall for Greenville</strong> (mid-October, 200,000+ visitors from 100 cities) is the single highest-foot-traffic test-drive opportunity of the year. The <strong>United Community Reedy River Run</strong> (April 18, 2026, SC RRCA championship, ~2,500 runners) warrants finish-line tent sponsorship and a Greenville Track Club member incentive. <strong>Artisphere</strong> (May 8–10, 2026, USA Today's top-rated art show nationally). <strong>Euphoria</strong> (Sept 17–20) is currently Lexus-presented — a competitive-displacement target.</p>
+      <p>Weekly <strong>TD Saturday Market</strong> presence (May–October), rotating Outback/Forester/Crosstrek/Ascent with a pet-adoption co-booth, compounds brand recognition far faster than paid digital.</p>
+
+      <h3>The corporate channel nobody runs</h3>
+      <p>BMW Plant Spartanburg (<strong>11,000+ employees</strong>), Prisma Health (15,000+), Michelin NA (7,120), GE Vernova, Fluor — collectively over <strong>30,000 Upstate workers</strong>. Build a branded employee VIP landing page, pitch it to HR/benefits teams, and you own a referral channel most Subaru competitors never touch.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 5: CLOSING -->
+<section class="chapter" id="closing">
+  <div class="container">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter Five</div>
+      <h1 class="chapter-title">Closing <em>informed</em> buyers</h1>
+      <p class="chapter-lede">The Glengarry "Always Be Closing" era is over for the 2026 Subaru buyer. The new frame is Always Be Helping.</p>
+    </div>
+
+    <div class="prose">
+      <p class="lede">For an experienced rep, this means closing on the <em>relationship</em>, not the vehicle — generating 50%+ of your volume from repeat and referral, and treating the close as "the final, most important way you help."</p>
+
+      <h3>The consultative close, step by step</h3>
+      <p>When a customer arrives having already read every Outback vs. Forester comparison on Reddit:</p>
+      <ol style="padding-left: 20px; margin-bottom: 24px;">
+        <li style="margin-bottom: 12px;"><strong>Acknowledge their research openly.</strong> Ask what they've already ruled out and why.</li>
+        <li style="margin-bottom: 12px;"><strong>Add what they couldn't learn online.</strong> Real-world ownership nuance: how symmetrical AWD actually behaves in snow vs. Toyota's on-demand system; EyeSight calibration realities; CVT longevity data on high-mileage Outbacks you've personally seen.</li>
+        <li style="margin-bottom: 12px;"><strong>Use the "backward close."</strong> <em>"Forget the car for a second. If we're talking again in six months and this was a home run, what has to be true?"</em> Work backward to the right trim.</li>
+        <li><strong>Treat "I want to think about it" as a smoke screen.</strong> Validate, isolate — <em>"Is it the vehicle, the numbers, or the timing?"</em> — address the real objection.</li>
+      </ol>
+    </div>
+
+    <div class="playbook-box">
+      <h4>The Carvana / CarMax Trade Conversation</h4>
+      <h3>Never dismiss the offer. Win with math and trust.</h3>
+      <p style="color: rgba(244,236,216,0.85); margin-bottom: 24px; line-height: 1.6;">70% of shoppers have a trade-in, but franchise dealers only capture about 34%. Carvana and CarMax now acquire roughly 13% of all U.S. used inventory from consumers — ~2 million cars per year.</p>
+      <ul>
+        <li><strong>Match or beat within a few hundred dollars</strong> using TradePending or AccuTrade</li>
+        <li><strong>Sell the sales-tax savings.</strong> In SC, trading $25K on a $40K purchase means tax only on the $15K difference — often <strong>$1,500+ back</strong></li>
+        <li><strong>Sell the one-trip convenience</strong> and your ability to structure the deal around their payment</li>
+        <li><strong>If you're genuinely short on the number, say so honestly.</strong> Trust-first moves win the long game</li>
+      </ul>
+    </div>
+
+    <div class="prose">
+      <h3>The follow-up cadence that wins</h3>
+      <p><strong>80% of sales require 5+ follow-ups. 92% of salespeople quit after 4.</strong> That gap is free money for disciplined reps. For a cold internet lead in 2026:</p>
+    </div>
+
+    <div class="ladder" style="max-width: 760px;">
+      <div class="rung">
+        <div class="rung-level">T+0</div>
+        <div>
+          <div class="rung-title">First 5 minutes</div>
+          <div class="rung-desc">Simultaneous text + email with price, payment, and an alternative VIN</div>
+        </div>
+        <div class="rung-comp">21× lift</div>
+      </div>
+      <div class="rung">
+        <div class="rung-level">T+15 min</div>
+        <div>
+          <div class="rung-title">Phone call</div>
+          <div class="rung-desc">Voice beats text for connection rate on first contact</div>
+        </div>
+        <div class="rung-comp">Must hit</div>
+      </div>
+      <div class="rung">
+        <div class="rung-level">T+2 hr</div>
+        <div>
+          <div class="rung-title">BombBomb video</div>
+          <div class="rung-desc">60-second personalized walkaround of the exact vehicle</div>
+        </div>
+        <div class="rung-comp">Differentiator</div>
+      </div>
+      <div class="rung">
+        <div class="rung-level">Days 2–10</div>
+        <div>
+          <div class="rung-title">Alternating text &amp; call</div>
+          <div class="rung-desc">Days 2, 3, 5, 7, 10 — then slow nurture into month 6+</div>
+        </div>
+        <div class="rung-comp">Verde 3-3-3</div>
+      </div>
+      <div class="rung">
+        <div class="rung-level">Day 45 &amp; 90</div>
+        <div>
+          <div class="rung-title">Peak-satisfaction referral call</div>
+          <div class="rung-desc">"Most of my business comes from people like you — if anyone mentions a car, keep me in mind?"</div>
+        </div>
+        <div class="rung-comp">75% retention</div>
+      </div>
+    </div>
+
+    <div class="divider"><span>※</span></div>
+
+    <div class="prose">
+      <h3>On the trainers — be selective</h3>
+      <p><strong>Joe Verde</strong> is the gold standard for fundamentals. <strong>Jonathan Dawson's Sellchology</strong> is the best modern consultative voice and comes from someone still selling cars. <strong>Brian Kramer</strong> (Cars Commerce/Germain Toyota) has the clearest thinking on competing with Carvana.</p>
+      <p>Treat <strong>Andy Elliott</strong> critically — his warrior framing runs counter to the consultative approach modern informed buyers respond to, and federal trial transcripts from 2021 documented testimony under immunity regarding contract falsification at "Big Red Dealerships." Cherry-pick fundamentals, skip the bravado. <strong>Grant Cardone's</strong> 10X mindset has value, but his word tracks are from a different retail era.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CHAPTER 6: CAREER -->
+<section class="chapter alt" id="career">
+  <div class="container">
+    <div class="chapter-header">
+      <div class="chapter-num">Chapter Six</div>
+      <h1 class="chapter-title">The <em>ten-year</em> arc</h1>
+      <p class="chapter-lede">Engineering a five-to-ten year career and a real balance sheet from a commission seat.</p>
+    </div>
+
+    <div class="prose">
+      <p class="lede">The earnings reality is wider than most three-year reps realize. BLS median sits at <strong>$62,790</strong>. Glassdoor's 90th percentile runs <strong>~$129,637</strong>. Roughly 18% of salespeople consistently clear $100K. The top 1% hit <strong>$200–500K</strong> through the same recipe: 14+ units/month, &gt;85% CSI, 3+ F&amp;I products attached per deal, and 50%+ repeat/referral business.</p>
+
+      <h3>The career ladder, with real comp</h3>
+    </div>
+
+    <div class="ladder">
+      <div class="rung">
+        <div class="rung-level">Years 0–3</div>
+        <div>
+          <div class="rung-title">Salesperson</div>
+          <div class="rung-desc">Learn the fundamentals. You are here — leveling up.</div>
+        </div>
+        <div class="rung-comp">$62K–$130K</div>
+      </div>
+      <div class="rung">
+        <div class="rung-level">Years 3–6</div>
+        <div>
+          <div class="rung-title">Top Producer / Closer</div>
+          <div class="rung-desc">14+ units/month, book of business, CSI over 85%</div>
+        </div>
+        <div class="rung-comp">$130K–$250K</div>
+      </div>
+      <div class="rung">
+        <div class="rung-level">Years 5–8</div>
+        <div>
+          <div class="rung-title">Finance &amp; Insurance Manager</div>
+          <div class="rung-desc">The highest-ROI next step. AFIP-certified. 63%+ earn $150K+.</div>
+        </div>
+        <div class="rung-comp">$150K–$250K</div>
+      </div>
+      <div class="rung">
+        <div class="rung-level">Years 7–10</div>
+        <div>
+          <div class="rung-title">General Sales Manager</div>
+          <div class="rung-desc">Desk, team of 8–15 reps, full P&amp;L participation</div>
+        </div>
+        <div class="rung-comp">$200K–$304K</div>
+      </div>
+      <div class="rung">
+        <div class="rung-level">Years 10+</div>
+        <div>
+          <div class="rung-title">General Manager</div>
+          <div class="rung-desc">Salary.com average $205K. Metro/group size drives spread.</div>
+        </div>
+        <div class="rung-comp">$200K–$500K+</div>
+      </div>
+      <div class="rung">
+        <div class="rung-level">Years 15+</div>
+        <div>
+          <div class="rung-title">Dealer Principal</div>
+          <div class="rung-desc">Minority-equity, PE partnership, or full buy-sell. OEM approval required.</div>
+        </div>
+        <div class="rung-comp">$500K–$1M+</div>
+      </div>
+    </div>
+
+    <div class="prose">
+      <h3>Credentials worth pursuing</h3>
+      <p>The credential that matters most for F&amp;I is <strong>AFIP certification</strong> — the industry's gold-standard compliance credential, tiered Basic (CPFS) → Senior → Master, roughly <strong>$900–$1,200</strong> for Basic with recertification every two years.</p>
+      <p>For the GM/dealer-principal track, the <strong>NADA Academy</strong> (year-long, six one-week sessions in Tysons VA plus 45 weeks in-store) graduates see <strong>~75% become owners or managers</strong>. The NADA Professional Series is $2,995.</p>
+
+      <h3>Negotiate the pay plan, not just the hire</h3>
+      <p>Key components to scrutinize: draw type (recoverable vs. non-recoverable), gross calculation method (after the "pack" of $250–$750/unit), tier structure (15–40% of front-end gross, commonly 25%), volume bonuses ($250 at 10 units ramping to $1,500 at 25), manufacturer spiffs, F&amp;I attach bonuses (up to 50% split on back-end), CSI bonuses, demo vehicle vs. demo allowance, and doc-fee commission treatment.</p>
+      <p>Per NADA, total comp rose <strong>5.2% YoY into 2026</strong> and 68% of dealers now compensate reps for online-lead conversions <em>even when closed remotely</em> — an additional $4,200–$9,600 annually that most reps don't ask for.</p>
+
+      <h3>Wealth building on variable income</h3>
+      <p>Max the dealer 401(k) match. If you have any 1099 side income, consider a <strong>Solo 401(k)</strong> ($70K combined 2025 limit). Real estate diversification (turnkey rentals, house hacking, self-directed IRAs holding real estate) is common in the industry precisely because it smooths variable commission months. Keep a six-month emergency fund given commission volatility.</p>
+    </div>
+
+    <div class="pullquote">
+      <p class="pullquote-text">Three structural shifts will define whether an automotive sales career still works in 2035: the agency model, the EV transition, and dealer consolidation. Subaru's hybrid-heavy path softens the EV transition better than most mainstream brands. That is a quiet moat worth noticing.</p>
+      <div class="pullquote-attr">— On the decade ahead</div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER / CONCLUSION -->
+<footer>
+  <div class="container">
+    <div class="footer-inner">
+      <div class="footer-mark">※</div>
+      <p>
+        The path from competent three-year Subaru rep to elite operator in Greenville comes down to a dozen disciplined choices compounding over 5–10 years. Treat every customer as a $40–50K lifetime-value account, not an $800 mini deal. The rest follows.
+      </p>
+      <div class="footer-meta">A playbook for Wes · Fairway Subaru · April 2026</div>
+    </div>
+  </div>
+</footer>
+
+</body>
+</html>
